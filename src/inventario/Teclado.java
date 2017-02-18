@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class Teclado {
 
-    private Scanner sc;
+  private Scanner sc;
 
   /**
    * Inicializa nuestro objeto sc con la entrada estándar que es la lectura desde el teclado

@@ -68,9 +68,9 @@ public class Articulo implements Serializable{
   @Override
  public String toString(){
    StringBuilder sb = new StringBuilder();
-   sb.append("CLAVE: ");
+   sb.append(" CLAVE: ");
    sb.append(clave).append("\n");
-   sb.append("NOMBRE: "); 
+   sb.append(" NOMBRE: "); 
    sb.append(nombre).append("\n");
    sb.append(" DESCRIPCION: ");
    sb.append(this.descripcion).append("\n");

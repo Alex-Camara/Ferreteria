@@ -23,47 +23,40 @@ public class MensajeUsuario {
         + "7. Salir");
   }
   
+  /**
+   * Metodo que lee la entrada del usuario.
+   * @return tec.leerEntero()
+   */
   public int leerOpcion() {
     Teclado tec = new Teclado();
     System.out.println("¿Cuál es tu opción?");
     return tec.leerEntero();
   }
   
+  /**
+   * metodo que, dado el parametro op pasado en la clase Inventario, realiza la opcion seleccionada
+   * @param op
+   * @throws ClassNotFoundException 
+   */
   public void realizarOpcion(int op) throws ClassNotFoundException {
     Actividades act = new Actividades();
-    Inventario inv = new Inventario();
-    int contador = articulo.size();
     Archivo ar = new Archivo();
     
     switch (op) {
       case 1:
-       ar.leerDatos();
-       //contador++;
+        ar.leerDatos();
       break;
       case 2:
-        Archivo.eliminarDato();
-
+        Archivo.eliminarDato(); //Metodo estatico de la clase Archivo
       break;
       case 3:;
         Archivo.modificarDato();
       break;
       case 4:
-       Archivo.buscarDato();
+        Archivo.buscarDato();
       break;
       case 5:
         ar.imprimirInventario();
-        //ar.mostrarInventario();
-        /*System.out.println("Selecciona el orden: ");
-        System.out.println("1.- por clave");
-        System.out.println("2.- por nombre");
-        System.out.println("3.- por descripcion");
-        int op2;
-        op2 = leerOpcion();
-        switch (op2) {
-          case 1:
-            act.mostrarInventario();
-            break;
-        }*/
         
       break;
       case 6:
@@ -74,5 +67,4 @@ public class MensajeUsuario {
         break;
     }
   }
-
 }
