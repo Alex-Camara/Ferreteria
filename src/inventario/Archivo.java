@@ -57,7 +57,7 @@ public class Archivo {
     
     System.out.println("INGRESA LA CANTIDAD ");
     existencia = tec.leerEntero();
-    tipo_unidad = tec.leerString();
+    tec.leerString();
 
     articulo.add(aux); //agregamos el objeto auxiliar al ArrayList.
     //SOLO DESPUES de agregar el objeto al Arraylist asignamos valores a sus atributos.
@@ -366,7 +366,7 @@ public class Archivo {
               nuevaExistencia = objetoArticulo.getExistencia() - cantidad; //obtenemos nueva existencia
               articulo.get(indice).setExistencia(nuevaExistencia); 
               guardarRegistrados();
-              registrarVenta(objetoArticulo, cantidad, nuevaExistencia);
+              registrarVenta(objetoArticulo, cantidad);
           } else {
               System.out.println("No existen suficientes en existencia");
             }
@@ -377,7 +377,7 @@ public class Archivo {
     }
   }
   
-  public void registrarVenta(Articulo art, int cantidad, int nuevaExistencia){
+  public void registrarVenta(Articulo art, int cantidad){
     Articulo artVendido = new Articulo();
     int PORCENTAJE_GANANCIA = 50;
     float precio_total;
@@ -392,8 +392,9 @@ public class Archivo {
     
     System.out.println("CONFIRMACION DE VENTA: \n"
                           + "CLAVE: " + art.getClave() +"\n"
-                          + "CANTIDAD EN EXISTENCIA: " + art.getExistencia()+"\n"
+                          + "CANTIDAD A VENDER: " + cantidad +"\n"
                           + "NOMBRE: " + art.getNombre() +"\n"
+                          + "CANTIDAD EN EXISTENCIA: " + art.getExistencia()+"\n"
                           + "PRECIO DEL PRODUCTO: " + precio_ganancia +"\n"
                           + "IVA: " + iva + "\n"
                           + "PRECIO TOTAL: " + precio_total + "\n");
@@ -403,7 +404,7 @@ public class Archivo {
     artVendido.setNombre(art.getNombre());
     artVendido.setTipo_unidad(art.getTipo_unidad());
     artVendido.setPrecio_venta(precio_total);
-    artVendido.setExistencia(nuevaExistencia);
+    artVendido.setPrecio_compra(precio_original);
     guardarVendidos();
     realizarVenta();
   }
