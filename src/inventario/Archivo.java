@@ -54,6 +54,10 @@ public class Archivo {
     
     System.out.println("TIPO DE UNIDAD: ");
     tipo_unidad = tec.leerString();
+    
+    System.out.println("INGRESA LA CANTIDAD ");
+    existencia = tec.leerEntero();
+    tipo_unidad = tec.leerString();
 
     articulo.add(aux); //agregamos el objeto auxiliar al ArrayList.
     //SOLO DESPUES de agregar el objeto al Arraylist asignamos valores a sus atributos.
@@ -62,7 +66,7 @@ public class Archivo {
     aux.setDescripcion(descripcion);
     aux.setPrecio_compra(precio_compra);
     aux.setTipo_unidad(tipo_unidad);
-    aux.getExistencia();
+    aux.setExistencia(existencia);
     guardarRegistrados();
     
   }
@@ -289,22 +293,23 @@ public class Archivo {
    * @param clave
    * @return articulo.get(indice)
    */
-  public static Articulo buscarPorClave(int clave){
+  public static int buscarPorClave(int clave){
     Teclado tec = new Teclado();
     //se crea un objeto del tipo Articulo
     Articulo objetoArticulo;
-    Articulo articuloReturn = null;
-    int indice = 0;
+    //Articulo articuloReturn = null;
+    int indice = -1;
 
       for (int i = 0; i < articulo.size(); i++) {
         //asignamos, para cada iteracion, el valor del objeto en el indice i, a objetoArticulo
         objetoArticulo = articulo.get(i);
                 
         if (objetoArticulo.getClave() == clave) {
-          articuloReturn = objetoArticulo;
+          //articuloReturn = objetoArticulo;
+          indice = i;
         }
       }
-      return articuloReturn;
+      return indice;
       
   }
   
@@ -331,23 +336,40 @@ public class Archivo {
     Articulo objetoArticulo;
     int opcion;
     int clave;
+    int indice;
 
-    mu.menuRegistroVenta();
+    mu.menuRegistroVenta(); 
     opcion = mu.leerOpcion();   
     
     switch(opcion){
       case 1:
         System.out.println("Introduce la clave del producto a vender");
         clave = tec.leerEntero();
-        if (buscarPorClave(clave) == null) {
+        if (buscarPorClave(clave) == -1) {
           System.out.println("\nArticulo inexistente\n");
           realizarVenta();
          } else {
             //se pasa clave como parametro del metodo buscarPorClave y se le asigna el resultado a 
             //objetoArticulo
-            objetoArticulo = buscarPorClave(clave);
+            indice = buscarPorClave(clave);
+            objetoArticulo = articulo.get(indice);
             System.out.println(objetoArticulo); 
-            registrarVenta(objetoArticulo);
+            
+            //cantidad a vender
+            System.out.println("Introduce la cantidad a vender: ");
+            int cantidad;
+            cantidad = tec.leerEntero();
+            //condicion para ver si tenemos suficientes en existencia
+            if (cantidad <= objetoArticulo.getExistencia()) {
+              
+              int nuevaExistencia;
+              nuevaExistencia = objetoArticulo.getExistencia() - cantidad; //obtenemos nueva existencia
+              articulo.get(indice).setExistencia(nuevaExistencia); 
+              guardarRegistrados();
+              registrarVenta(objetoArticulo, cantidad, nuevaExistencia);
+          } else {
+              System.out.println("No existen suficientes en existencia");
+            }
         }
       break;
       case 2:
@@ -355,7 +377,7 @@ public class Archivo {
     }
   }
   
-  public static void registrarVenta(Articulo art){
+  public void registrarVenta(Articulo art, int cantidad, int nuevaExistencia){
     Articulo artVendido = new Articulo();
     int PORCENTAJE_GANANCIA = 50;
     float precio_total;
@@ -370,6 +392,7 @@ public class Archivo {
     
     System.out.println("CONFIRMACION DE VENTA: \n"
                           + "CLAVE: " + art.getClave() +"\n"
+                          + "CANTIDAD EN EXISTENCIA: " + art.getExistencia()+"\n"
                           + "NOMBRE: " + art.getNombre() +"\n"
                           + "PRECIO DEL PRODUCTO: " + precio_ganancia +"\n"
                           + "IVA: " + iva + "\n"
@@ -380,7 +403,9 @@ public class Archivo {
     artVendido.setNombre(art.getNombre());
     artVendido.setTipo_unidad(art.getTipo_unidad());
     artVendido.setPrecio_venta(precio_total);
+    artVendido.setExistencia(nuevaExistencia);
     guardarVendidos();
+    realizarVenta();
   }
   
   public void imprimirRegistroVenta(){

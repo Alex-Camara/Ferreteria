@@ -88,7 +88,8 @@ public class Articulo implements Serializable{
   @Override
  public String toString(){
    StringBuilder sb = new StringBuilder();
-   sb.append(" CLAVE: ");
+   sb.append("------------------------------------------------");
+   sb.append("\n CLAVE: ");
    sb.append(clave).append("\n");
    sb.append(" NOMBRE: "); 
    sb.append(nombre).append("\n");
