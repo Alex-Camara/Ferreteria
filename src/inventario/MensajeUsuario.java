@@ -10,7 +10,7 @@ public class MensajeUsuario {
 
   public ArrayList<Articulo> articulo = new ArrayList<Articulo>();
   /**
-   * Muestra las opciones realizadas por el usuario
+   * Muestra las opciones a elegir por el usuario
    */
   public void menu() {
     System.out.println("BIENVENIDO AL INVENTARIO ¿Que desea realizar?\n"
@@ -19,8 +19,26 @@ public class MensajeUsuario {
         + "3. Editar Articulo\n"
         + "4. Buscar Ariculo\n"
         + "5. Mostrar Inventario\n"
-        + "6. Ordenar Inventario por nombre\n"
-        + "7. Salir");
+        + "6. Ordenar Inventario\n"
+        + "7. Registrar Venta\n"
+        + "8. Mostrar Registro de Ventas\n"
+        + "9. Salir");
+  }
+  
+  /**
+   * submenu para la opcion "Ordenar Inventario"
+   */
+  public void menuOrden(){
+    System.out.println("Selecciona el criterio de orden\n"
+        + "1. por Nombre\n"
+        + "2. por Clave\n"
+        + "3. Salir\n");
+  }
+  
+  public void menuRegistroVenta(){
+    System.out.println("Selecciona una opcion: \n"
+        + "1. Ingresar clave\n"
+        + "2. Regresar al menu\n");
   }
   
   /**
@@ -53,18 +71,36 @@ public class MensajeUsuario {
         Archivo.modificarDato();
       break;
       case 4:
-        Archivo.buscarDato();
+        menuOrden();
+        int opcion = leerOpcion();
+        switch(opcion){
+          case 1:
+            ar.leerNombre();
+          break;
+          case 2:
+            ar.leerClave();
+          break;
+          default:
+          break;
+        }
       break;
       case 5:
-        ar.imprimirInventario();
-        
+        Archivo.imprimirInventario();
       break;
       case 6:
-       ar.ordenar();
-       break;
+       Archivo.ordenar();
+      break;
+      case 7:
+        ar.realizarVenta();
+      break;
+      case 8:
+        ar.imprimirRegistroVenta();
+      break;
+      case 9:
+      break;
       default:
         System.out.println("Valor fuera de rango");
-        break;
+      break;
     }
   }
 }

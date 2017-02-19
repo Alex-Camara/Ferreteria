@@ -11,19 +11,19 @@ public class Inventario {
 
   /**
    * @param args the command line arguments
+   * @throws java.lang.ClassNotFoundException
    */
   public static void main(String[] args) throws ClassNotFoundException {
 
     
     MensajeUsuario mu = new MensajeUsuario();
-    Articulo art = new Articulo();
     int op;
     do {
       mu.menu();
       op = mu.leerOpcion();
       mu.realizarOpcion(op);
       
-    } while (op != 7);
+    } while (op != 9);
   
   }
 
