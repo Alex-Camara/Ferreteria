@@ -17,9 +17,8 @@ import java.util.List;
  */
 public class Archivo {
 
-  //se declara el ArrayList articulo, que tendra presistencia y sera la vase de las operaciones.
+  //se declara el ArrayList articulo, que tendra presistencia y sera la base de las operaciones.
   public static ArrayList<Articulo> articulo = new ArrayList<Articulo>();
-  public static ArrayList<Articulo> articuloVendido = new ArrayList<Articulo>();
   Teclado tec = new Teclado();
   MensajeUsuario mu = new MensajeUsuario();
   
@@ -88,24 +87,7 @@ public class Archivo {
          
        }
   }
-    /**
-    * metodo estandar para seliarizar un objeto.
-    * para registrar las ventas
-    */
-    public static void guardarVendidos(){
 
-    try{
-        FileOutputStream fos= new FileOutputStream("vendido.ser");
-        ObjectOutputStream oos= new ObjectOutputStream(fos);
-        //escribimos el ArrayList en el archivo
-        oos.writeObject(articuloVendido);
-        oos.close();
-        fos.close();
-       }catch(IOException ioe){
-         
-       }
-  }
-    
   /**
    * Metodo que solo recupera los ojetos del archivo y los regresa en Lista
    * @param art
@@ -123,26 +105,16 @@ public class Archivo {
     return articulo;
      }
   
-  public static List recuperarRegistroVenta(){
-    
-    try {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream("vendido.ser"));
-        articuloVendido = (ArrayList<Articulo>) in.readObject(); 
-        in.close();
-    }
-    catch(IOException | ClassNotFoundException e) {}
-    return articuloVendido;
-     }
      
-  /*
-  Metodo que imprime el valor de return de recuperarDatos()
-  */
+  /**
+   * Metodo que imprime el valor de return de recuperarDatos().
+  **/
   public static void imprimirInventario(){
     System.out.println(recuperarDatos());
   }
      
   /**
-   * Metodo para eliminar un objeto introduciendo clave del objeto
+   * Metodo para eliminar un objeto introduciendo clave del objeto.
    */
   public static void eliminarDato(){
     Teclado tec = new Teclado();
@@ -173,7 +145,10 @@ public class Archivo {
       System.out.println("no se encontro el objeto");
     }
   }
-     
+   
+  /**
+  * Metodo que modifica uno de los atributos de la clase Articulo en base a la clave de este.
+  */  
   public static void modificarDato(){
     Teclado tec = new Teclado();
     Articulo objetoArticulo;
@@ -325,98 +300,9 @@ public class Archivo {
       return o1.getNombre().compareTo(o2.getNombre());
       }
     });
-      for(int i = 0; i < articulo.size() ; i++){{
+    //despues de ordenado se imprime el ArrayList, ya que este solo es ordenado momentaneamente
+      for(int i = 0; i < articulo.size() ; i++){
         System.out.println(articulo);
       }
-      }
-  }
-  
-  public void realizarVenta(){
-    Teclado tec = new Teclado();
-    Articulo objetoArticulo;
-    int opcion;
-    int clave;
-    int indice;
-
-    mu.menuRegistroVenta(); 
-    opcion = mu.leerOpcion();   
-    
-    switch(opcion){
-      case 1:
-        System.out.println("Introduce la clave del producto a vender");
-        clave = tec.leerEntero();
-        if (buscarPorClave(clave) == -1) {
-          System.out.println("\nArticulo inexistente\n");
-          realizarVenta();
-         } else {
-            //se pasa clave como parametro del metodo buscarPorClave y se le asigna el resultado a 
-            //objetoArticulo
-            indice = buscarPorClave(clave);
-            objetoArticulo = articulo.get(indice);
-            System.out.println(objetoArticulo); 
-            
-            //cantidad a vender
-            System.out.println("Introduce la cantidad a vender: ");
-            int cantidad;
-            cantidad = tec.leerEntero();
-            //condicion para ver si tenemos suficientes en existencia
-            if (cantidad <= objetoArticulo.getExistencia()) {
-              
-              int nuevaExistencia;
-              nuevaExistencia = objetoArticulo.getExistencia() - cantidad; //obtenemos nueva existencia
-              articulo.get(indice).setExistencia(nuevaExistencia); 
-              guardarRegistrados();
-              registrarVenta(objetoArticulo, cantidad);
-          } else {
-              System.out.println("No existen suficientes en existencia");
-            }
-        }
-      break;
-      case 2:
-      break;
-    }
-  }
-  
-  public void registrarVenta(Articulo art, int cantidad){
-    Articulo artVendido = new Articulo();
-    int PORCENTAJE_GANANCIA = 50;
-    float precio_total;
-    float precio_ganancia = 0;
-    float precio_original = art.getPrecio_compra();
-    float iva;
-    
-    precio_ganancia = precio_original + ((precio_original*PORCENTAJE_GANANCIA) / 100);
-    
-    iva = calcularIVA(precio_ganancia);
-    precio_total = precio_ganancia + iva;
-    
-    System.out.println("CONFIRMACION DE VENTA: \n"
-                          + "CLAVE: " + art.getClave() +"\n"
-                          + "CANTIDAD A VENDER: " + cantidad +"\n"
-                          + "NOMBRE: " + art.getNombre() +"\n"
-                          + "CANTIDAD EN EXISTENCIA: " + art.getExistencia()+"\n"
-                          + "PRECIO DEL PRODUCTO: " + precio_ganancia +"\n"
-                          + "IVA: " + iva + "\n"
-                          + "PRECIO TOTAL: " + precio_total + "\n");
-  
-    articuloVendido.add(artVendido);
-    artVendido.setClave(art.getClave());
-    artVendido.setNombre(art.getNombre());
-    artVendido.setTipo_unidad(art.getTipo_unidad());
-    artVendido.setPrecio_venta(precio_total);
-    artVendido.setPrecio_compra(precio_original);
-    guardarVendidos();
-    realizarVenta();
-  }
-  
-  public void imprimirRegistroVenta(){
-    System.out.println(recuperarRegistroVenta());
-  }
-  
-  public static float calcularIVA(float costo){
-    int IVA = 16;
-    float impuesto;
-    
-    return impuesto = (costo*IVA)/100;
   }
 }

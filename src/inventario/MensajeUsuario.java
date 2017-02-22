@@ -7,8 +7,7 @@ import java.util.ArrayList;
  * @author Miguel Alejandro Cámara Árciga
  */
 public class MensajeUsuario {
-
-  public ArrayList<Articulo> articulo = new ArrayList<Articulo>();
+  
   /**
    * Muestra las opciones a elegir por el usuario
    */
@@ -57,8 +56,8 @@ public class MensajeUsuario {
    * @throws ClassNotFoundException 
    */
   public void realizarOpcion(int op) throws ClassNotFoundException {
-    Actividades act = new Actividades();
     Archivo ar = new Archivo();
+    Venta v1 = new Venta();
     
     switch (op) {
       case 1:
@@ -91,10 +90,10 @@ public class MensajeUsuario {
        Archivo.ordenar();
       break;
       case 7:
-        ar.realizarVenta();
+        v1.realizarVenta();
       break;
       case 8:
-        ar.imprimirRegistroVenta();
+        v1.imprimirRegistroVenta();
       break;
       case 9:
       break;
