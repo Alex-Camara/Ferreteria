@@ -23,7 +23,7 @@ public class Inventario {
       op = mu.leerOpcion();
       mu.realizarOpcion(op);
       
-    } while (op != 9);
+    } while (op != 0);
   
   }
 

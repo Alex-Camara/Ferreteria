@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  * @author Miguel Alejandro Cámara Árciga
  */
 public class Venta {
-  public static ArrayList<Articulo> articuloVendido = new ArrayList<Articulo>();
+  public static ArrayList<ArticuloVendido> articuloVendido = new ArrayList<ArticuloVendido>();
   Teclado tec = new Teclado();
   MensajeUsuario mu = new MensajeUsuario();
 
@@ -44,7 +45,7 @@ public class Venta {
   public static List recuperarRegistroVenta(){
     try {
       ObjectInputStream in = new ObjectInputStream(new FileInputStream("vendido.ser"));
-      articuloVendido = (ArrayList<Articulo>) in.readObject(); 
+      articuloVendido = (ArrayList<ArticuloVendido>) in.readObject(); 
       in.close();
     } catch(IOException | ClassNotFoundException e) {
     }
@@ -108,12 +109,21 @@ public class Venta {
     * @param cantidad 
     */
   public void registrarVenta(Articulo art, int cantidad){
-    Articulo artVendido = new Articulo();
+    ArticuloVendido aVendido = new ArticuloVendido();
     int PORCENTAJE_GANANCIA = 50;
     float precio_total;
     float precio_ganancia = 0;
     float precio_original = art.getPrecio_compra();
     float iva;
+    //se crea una instancia de la clase Calendar de java.util para obtener la fecha actual
+    Calendar fecha = Calendar.getInstance();
+    String dia;
+    String mes;
+    String anio;
+    //asignamos la fecha actual a cada variable string.
+    dia = Integer.toString(fecha.get(Calendar.DATE));
+    mes = Integer.toString(fecha.get(Calendar.MONTH));
+    anio = Integer.toString(fecha.get(Calendar.YEAR));
     
     //la ganacia va a ser igual a el precio original + el porcentaje de ganacia
     precio_ganancia = precio_original + ((precio_original*PORCENTAJE_GANANCIA) / 100);
@@ -122,20 +132,26 @@ public class Venta {
     precio_total = precio_ganancia + iva;
     
     System.out.println("CONFIRMACION DE VENTA: \n"
+                          + "FECHA: " + dia + " del mes " + mes + " del " + anio + "\n"
                           + "CLAVE: " + art.getClave() +"\n"
                           + "CANTIDAD A VENDER: " + cantidad +"\n"
                           + "NOMBRE: " + art.getNombre() +"\n"
+                          + "DESCRIPCION: " + art.getDescripcion() +"\n"
                           + "CANTIDAD EN EXISTENCIA: " + art.getExistencia()+"\n"
                           + "PRECIO DEL PRODUCTO: " + precio_ganancia +"\n"
                           + "IVA: " + iva + "\n"
                           + "PRECIO TOTAL: " + precio_total + "\n");
   
-    articuloVendido.add(artVendido);
-    artVendido.setClave(art.getClave());
-    artVendido.setNombre(art.getNombre());
-    artVendido.setTipo_unidad(art.getTipo_unidad());
-    artVendido.setPrecio_venta(precio_total);
-    artVendido.setPrecio_compra(precio_original);
+    articuloVendido.add(aVendido);
+    aVendido.setDia(dia);
+    aVendido.setMes(mes);
+    aVendido.setAnio(anio);
+    aVendido.setClave(art.getClave());
+    aVendido.setNombre(art.getNombre());
+    aVendido.setTipo_unidad(art.getTipo_unidad());
+    aVendido.setDescripcion(art.getDescripcion());
+    aVendido.setPrecio_venta(precio_total);
+    aVendido.setPrecio_compra(precio_original);
     guardarVendidos();
     //se regresa al metodo realizarVenta por si el usuario quiere volver a registrar una.
     realizarVenta();
@@ -159,6 +175,86 @@ public class Venta {
     float impuesto;
     
     return impuesto = (costo*IVA)/100;
+  }
+  
+  public void buscarPorFecha(String dia, String mes, String anio){
+    ArticuloVendido artven = new ArticuloVendido();
+    float total_ganancia = 0;
+    
+    for (int i = 0; i < articuloVendido.size(); i++) {
+      if (dia != null && mes != null && anio != null) {
+        artven = articuloVendido.get(i);
+        if (dia.equals(artven.getDia()) && mes.equals(artven.getMes()) && anio.equals(artven.getAnio())) {
+          //se suma el precio de venta de los articulos que cumplan con el criterio de busqueda
+          total_ganancia = total_ganancia + artven.getPrecio_venta();
+          System.out.println(artven);
+        }
+      }
+      if (mes != null && anio != null) {
+        artven = articuloVendido.get(i);
+        if (mes.equals(artven.getMes()) && anio.equals(artven.getAnio())) {
+          //se suma el precio de venta de los articulos que cumplan con el criterio de busqueda
+          total_ganancia = total_ganancia + artven.getPrecio_venta();
+          System.out.println(artven);
+        }
+    }
+      if (anio != null) {
+        artven = articuloVendido.get(i);
+        if (anio.equals(artven.getAnio())) {
+          //se suma el precio de venta de los articulos que cumplan con el criterio de busqueda
+          total_ganancia = total_ganancia + artven.getPrecio_venta();
+          System.out.println(artven);
+        }
+            }
+    }
+    System.out.println("Total de gananacia: " + total_ganancia);
+  }
+  
+  
+  public void consultarPorFecha(){
+    int opcion;
+    String dia;
+    String mes;
+    String anio;
+    
+    mu.menuConsultaPorFecha();
+    opcion = mu.leerOpcion();
+    
+    switch(opcion){
+      case 1:
+        
+        System.out.println("Introduce el dia:");
+        dia = tec.leerString();
+        System.out.println("Introduce el mes:");
+        mes = tec.leerString();
+        System.out.println("Introduce el año:");
+        anio = tec.leerString();
+        
+        buscarPorFecha(dia, mes, anio);
+      break;
+      case 2:
+        
+        System.out.println("Introduce el mes:");
+        mes = tec.leerString();
+        System.out.println("Introduce el año:");
+        anio = tec.leerString();
+        
+        buscarPorFecha(null, mes, anio);
+        break;
+      case 3:
+        
+        System.out.println("Introduce el año:");
+        anio = tec.leerString();
+        
+        buscarPorFecha(null, null, anio);
+        break;
+      default:
+      break;
+    }
+  }
+  
+  public void gananciaPorPeriodo(){
+    
   }
 }
     

@@ -9,13 +9,14 @@ import java.io.Serializable;
 public class Articulo implements Serializable{
 
   
-  private int clave;
-  private int existencia;
-  private String nombre;
-  private String descripcion;
-  private float precio_compra;
+  int clave;
+  int existencia;
+  String nombre;
+  String descripcion;
+  float precio_compra;
   private float precio_venta;
-  private String tipo_unidad;
+  String tipo_unidad;
+    
 
   public Articulo() {
   }
@@ -26,7 +27,6 @@ public class Articulo implements Serializable{
     this.nombre = nombre;
     this.descripcion = descripcion;
     this.precio_compra = precio_compra;
-    this.precio_venta = precio_venta;
     this.tipo_unidad = tipo_unidad;
   }
   
@@ -69,14 +69,6 @@ public class Articulo implements Serializable{
   public void setPrecio_compra(float precio_compra) {
     this.precio_compra = precio_compra;
   }
-  
-  public float getPrecio_venta() {
-    return precio_venta;
-  }
-
-  public void setPrecio_venta(float precio_venta) {
-    this.precio_venta = precio_venta;
-  }
 
   public String getTipo_unidad() {
     return tipo_unidad;
@@ -101,8 +93,6 @@ public class Articulo implements Serializable{
    sb.append(this.tipo_unidad).append("\n");
    sb.append(" EXISTENCIA: ");
    sb.append(this.existencia).append("\n");
-   sb.append(" PRECIO DE VENTA: ");
-   sb.append(this.precio_venta).append("\n");
    return sb.toString();
  }
 

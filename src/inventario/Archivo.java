@@ -163,6 +163,7 @@ public class Archivo {
             System.out.println(articulo.get(i));
             int opcion = 0;
 
+            while (opcion != 6){
             System.out.println("¿que atributo desea modificar?\n"
               + "1. Clave\n" 
               + "2. Nombre\n" 
@@ -210,6 +211,7 @@ public class Archivo {
                 guardarRegistrados();
               }
               System.out.println("se modifico el objeto");
+            }
           }
       }
   }
@@ -231,7 +233,7 @@ public class Archivo {
   /**
    * Metodo que busca un articulo dado un nombre introducido
    * @param nombre
-   * @return articulo.get(indice)
+   * @return articuloReturn
    */
   public static Articulo buscarPorNombre(String nombre){
     Teclado tec = new Teclado();
